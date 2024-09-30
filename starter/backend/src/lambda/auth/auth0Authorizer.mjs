@@ -1,6 +1,8 @@
 import Axios from 'axios'
 import jsonwebtoken from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger.mjs'
+import axios from 'axios'
+import jwkToPem from 'jwk-to-pem';
 
 const logger = createLogger('auth')
 
@@ -10,6 +12,7 @@ export async function handler(event) {
   try {
     const jwtToken = await verifyToken(event.authorizationToken)
 
+    logger.info('User was authorized', { jwtToken })
     return {
       principalId: jwtToken.sub,
       policyDocument: {
@@ -46,8 +49,21 @@ async function verifyToken(authHeader) {
   const token = getToken(authHeader)
   const jwt = jsonwebtoken.decode(token, { complete: true })
 
-  // TODO: Implement token verification
-  return undefined;
+  try {
+    const keys = await axios.get(jwksUrl).then((res) => res.data?.keys)
+    const key = keys?.find((key) => key.kid === jwt.header.kid)
+
+    if (!key) {
+      throw new Error('The key id not found', { kid: jwt.header.kid })
+    }
+
+    const pem = jwkToPem(key)
+
+    return jsonwebtoken.verify(token, pem, { algorithms: [key.alg] })
+  } catch (err) {
+    logger.error('Verify Token fails', { authHeader })
+    throw err
+  }
 }
 
 function getToken(authHeader) {

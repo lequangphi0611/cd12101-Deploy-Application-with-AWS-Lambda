@@ -1,8 +1,9 @@
-import * as middy from 'middy'
-import { cors } from 'middy/middlewares'
-import * as dataAccess from '../../data-access'
-import { getUserId } from '../utils'
-import { getSignedUrl } from '../../business-logic'
+import middy from '@middy/core'
+import cors from '@middy/http-cors'
+import * as dataAccess from '../../data-access/index.mjs'
+import httpErrorHandler from '@middy/http-error-handler'
+import { getUserId } from '../utils.mjs'
+import { getSignedUrl } from '../../business-logic/index.mjs'
 
 export const handler = middy()
   .use(httpErrorHandler())
@@ -17,7 +18,7 @@ export const handler = middy()
 
     const uploadUrl = await getSignedUrl(todoId)
 
-    await dataAccess.saveImageUrl(userId, todoId, bucketName)
+    await dataAccess.saveImageUrl(userId, todoId, process.env.S3_BUCKET)
 
     return {
       statusCode: 202,

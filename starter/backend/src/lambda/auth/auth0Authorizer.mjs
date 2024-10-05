@@ -1,4 +1,3 @@
-import Axios from 'axios'
 import jsonwebtoken from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger.mjs'
 import axios from 'axios'
@@ -6,7 +5,7 @@ import jwkToPem from 'jwk-to-pem';
 
 const logger = createLogger('auth')
 
-const jwksUrl = 'https://test-endpoint.auth0.com/.well-known/jwks.json'
+const jwksUrl = 'https://dev-jvfvxmo8oz8oivhi.us.auth0.com/.well-known/jwks.json'
 
 export async function handler(event) {
   try {

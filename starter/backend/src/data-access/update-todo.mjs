@@ -1,6 +1,6 @@
-import { CONSTANTS } from './constant'
-import { getDocClientDb } from './doc-client'
-import { logger } from './logger'
+import { CONSTANTS } from './constant.mjs'
+import { getDocClientDb } from './doc-client.mjs'
+import { logger } from './logger.mjs'
 
 export const updateTodo = async (userId, todoId, updateData) => {
   logger.info(`Updating todo item. userId = ${userId}, todoId = ${todoId}`)

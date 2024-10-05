@@ -2,7 +2,7 @@ import middy from '@middy/core'
 import cors from '@middy/http-cors'
 import httpErrorHandler from '@middy/http-error-handler'
 import { getUserId } from '../utils.mjs'
-import { getTodos } from '../../business-logic'
+import { updateTodo } from '../../business-logic/index.mjs'
 
 export const handler = middy()
   .use(httpErrorHandler())
@@ -12,9 +12,11 @@ export const handler = middy()
     })
   )
   .handler(async (event) => {
+    const todoId = event.pathParameters.todoId
+    const todo = JSON.parse(event.body)
     const userId = getUserId(event)
 
-    const todos = await getTodos(userId)
+    const updatedTodo = await updateTodo(userId, todoId, todo);
 
     return {
       statusCode: 200,
@@ -22,6 +24,6 @@ export const handler = middy()
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
       },
-      body: JSON.stringify(todos)
+      body: JSON.stringify(updatedTodo)
     }
   })

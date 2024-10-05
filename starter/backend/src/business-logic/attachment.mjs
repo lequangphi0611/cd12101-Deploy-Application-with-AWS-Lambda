@@ -1,9 +1,9 @@
-import * as AWS from 'aws-sdk'
-import * as AWSRay from 'aws-xray-sdk'
+import AWS from 'aws-sdk'
+import AwsXray from 'aws-xray-sdk'
 
-const XAWS = AWSRay.captureAWS(AWS)
+const XAWS = AwsXray.captureAWS(AWS)
 
-const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME
+const S3_BUCKET_NAME = process.env.S3_BUCKET
 const URL_EXPIRATION = process.env.SIGNED_URL_EXPIRATION
 
 let s3Bucket = null
@@ -24,5 +24,5 @@ export const getSignedUrl = async (todoId) =>
   getS3Bucket().getSignedUrlPromise('putObject', {
     Bucket: S3_BUCKET_NAME,
     Key: todoId,
-    Expires: URL_EXPIRATION
+    Expires: Number(URL_EXPIRATION)
   })

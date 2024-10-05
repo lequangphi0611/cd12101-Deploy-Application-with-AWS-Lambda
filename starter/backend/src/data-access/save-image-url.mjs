@@ -1,6 +1,6 @@
-import { CONSTANTS } from './constant'
-import { getDocClientDb } from './doc-client'
-import { logger } from './logger'
+import { CONSTANTS } from './constant.mjs'
+import { getDocClientDb } from './doc-client.mjs'
+import { logger } from './logger.mjs'
 
 export const saveImageUrl = async (userId, todoId, bucketName) => {
   

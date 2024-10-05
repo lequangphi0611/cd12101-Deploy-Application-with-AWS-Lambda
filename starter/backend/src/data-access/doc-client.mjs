@@ -1,10 +1,9 @@
-import * as AWS from 'aws-sdk'
+import AWS from 'aws-sdk'
 
-import * as AWSXray from 'aws-xray-sdk'
-import { logger } from './logger'
+import AwsXray from 'aws-xray-sdk'
+import { logger } from './logger.mjs'
 
-const XAWS = AWSXray.captureAWS(AWS)
-
+const XAWS = AwsXray.captureAWS(AWS)
 let docClient = null
 
 /** @type {XAWS.DynamoDB.DocumentClient} */
